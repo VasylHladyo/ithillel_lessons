@@ -25,7 +25,7 @@ if (a % 3 === 0 && a % 5 === 0) {
 **/
 
 /*
-Пояснення що до розрашунку вмсокосного року знайшов на ресурсі:
+Пояснення що до розрахунку високосного року знайшов на ресурсі:
 https://bankchart.com.ua/finansoviy_gid/groshi_rodini/novini/yak_viznachiti_yakiy_rik_visokosniy_
 
 Конкретніше ось цей абзац зі статті:
