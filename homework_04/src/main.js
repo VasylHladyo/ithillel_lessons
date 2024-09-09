@@ -74,14 +74,10 @@ if (taskPart === 1) {
         for (let j = 0; j < N - i; j++) {
             tree += ' ';
         }
-        let number = 1;
         for (let k = 0; k < 2 * i - 1; k++) {
-            tree += number;
-            number++;
+            tree += '*';
         }
-        if (i < N) {
-            tree += ' ';
-        }
+        tree += '\n';
     }
 
     console.log(tree);
