@@ -4,27 +4,34 @@
 * */
 
 let a = [1, 2, 3, 4, 5, 6];
-function primeNum(arr) {
-    let arrPrime = [];
-    for (let i = 0; i < arr.length; i++) {
-        let num = arr[i];
-        let isPrime = true;
+// function primeNum(arr) {
+//     let arrPrime = [];
+//     for (let i = 0; i < arr.length; i++) {
+//         let num = arr[i];
+//         let isPrime = true;
+//
+//         if (num <= 1) {
+//             continue;
+//         }
+//         for (let j = 2; j < num; j++) {
+//             if (num % j === 0) {
+//                 isPrime = false;
+//                 break;
+//             }
+//         }
+//         if (isPrime) {
+//             arrPrime.push(num);
+//         }
+//     }
+//     return console.log(arrPrime);
+// }
 
-        if (num <= 1) {
-            continue;
-        }
-        for (let j = 2; j < num; j++) {
-            if (num % j === 0) {
-                isPrime = false;
-                break;
-            }
-        }
-        if (isPrime) {
-            arrPrime.push(num);
-        }
-    }
-    return console.log(arrPrime);
+function primeNum(arr) {
+    let result = arr.filter(number => number > 1 && ![...Array(number).keys()].slice(2).some(i => number % i === 0));
+    return console.log(result);
+
 }
+
 
 primeNum(a);
 
