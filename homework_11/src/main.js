@@ -64,28 +64,26 @@ console.log('===================');
 Вам необхідно написати функцію-декоратор retry(fn, maxAttempts), яка приймає на вхід функцію і додає можливість
 * викликати функцію з максимальною кількістю спроб у разі помилки та повертає результат останнього виклику.
 **/
-function riskyFunction(attempt) {
+function countFunction(attempt) {
     if (attempt === 1 || attempt === 2) {
-        return true;  // Перша і друга спроби успішні
+        return true;
     } else if (attempt === 3) {
-        return false;  // Третя спроба неуспішна
+        return false;
     }
 }
 
 function retry(fn, maxAttempts) {
     let lastResult;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        const result = fn(attempt);  // Викликаємо функцію з номером спроби
+        const result = fn(attempt);
         if (result === true) {
             lastResult = `Результат спроби ${attempt}`;
         } else if (attempt === maxAttempts) {
             console.log("Викликати функцію не вдалося");
-            return lastResult;  // Повертаємо результат другої спроби
+            return lastResult;
         }
     }
 }
-
-// Виклик функції retry з трьома спробами
-console.log(retry(riskyFunction, 3));
+console.log(retry(countFunction, 3));
 
 
