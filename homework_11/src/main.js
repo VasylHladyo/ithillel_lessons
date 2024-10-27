@@ -75,28 +75,31 @@ console.log('===================');
 Вам необхідно написати функцію-декоратор retry(fn, maxAttempts), яка приймає на вхід функцію і додає можливість
 * викликати функцію з максимальною кількістю спроб у разі помилки та повертає результат останнього виклику.
 **/
-function countFunction(attempt) {
-    if (attempt === 1 || attempt === 2) {
-        return true;
-    } else if (attempt === 3) {
-        return false;
-    }
+function sum(a, b) {
+    return a + b;
 }
 
 function retry(fn, maxAttempts) {
-    const attempt = 4;
-    const result = fn(attempt);
+    let attempts = 0;
 
-    if (result === true) {
-        return `Результат спроби ${attempt}`;
-    } else if (attempt > maxAttempts) {
-        return lastResult;
-    }
+    return function (...args) {
+        attempts++;
 
-    lastResult = `Результат спроби ${attempt}`;
-    return lastResult;
+        if (attempts > maxAttempts) {
+            throw new Error(`Ліміт викликів перевищено: ${maxAttempts}`);
+        }
+
+        return fn(...args);
+    };
 }
 
-console.log(retry(countFunction, 4));
+let retriedSum = retry(sum, 3);
+
+console.log(retriedSum(2, 3));
+console.log(retriedSum(2, 3));
+console.log(retriedSum(2, 3));
+console.log(retriedSum(2, 3));
+console.log(retriedSum(2, 3));
+
 
 
