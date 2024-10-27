@@ -5,10 +5,8 @@
 * (тому що 3 + 5 = 8) або 6, якщо аргумент не буде передано.
 * */
 
-function summarize(num) {
-    return function(arg) {
-        return (arg !== undefined ? arg : 1) + num;
-    };
+function summarize(num, arg = 1) {
+    return arg + num;
 }
 
 const addFive = summarize(4);
