@@ -1,50 +1,55 @@
-// /*
-// * concurrentPromises.Створіть функцію concurrentPromises, яка приймає масив промісів і максимальну кількість промісів,
-// * що виконуються одночасно. Функція має виконати проміси паралельно, але не більше зазначеної максимальної кількості.
-// * Результатом функції має бути масив результатів промісів.
-// * */
-//
-// //Тут я скористався допомогою chatgpt правда трохи модифікував йього
-//
-// function concurrentPromises(promises, maxConcurrent) {
-//     const results = [];
-//     let currentIndex = 0;
-//     let activePromises = 0;
-//
-//     return new Promise((resolve) => {
-//         function executeNext() {
-//             while (activePromises < maxConcurrent && currentIndex < promises.length) {
-//                 const promise = promises[currentIndex];
-//                 activePromises++;
-//
-//                 promise
-//                     .then(result => {
-//                         results[currentIndex] = result;
-//                         console.log(`Promise ${currentIndex + 1} completed with result: ${result}`);
-//                     })
-//                     .finally(() => {
-//                         activePromises--;
-//                         currentIndex++;
-//                         executeNext();
-//
-//                         if (currentIndex === promises.length && activePromises === 0) {
-//                             resolve(results);
-//                         }
-//                     });
-//             }
-//         }
-//
-//         executeNext();
-//     });
-// }
-//
-// concurrentPromises([
-//     new Promise(resolve => setTimeout(() => resolve('Promise 1'), 1000)),
-//     new Promise(resolve => setTimeout(() => resolve('Promise 2'), 500)),
-//     new Promise(resolve => setTimeout(() => resolve('Promise 3'), 800))
-// ], 2).then(results => {
-//     console.log("All results:", results);
-// });
-//
-//
-//
+/*
+* concurrentPromises.Створіть функцію concurrentPromises, яка приймає масив промісів і максимальну кількість промісів,
+* що виконуються одночасно. Функція має виконати проміси паралельно, але не більше зазначеної максимальної кількості.
+* Результатом функції має бути масив результатів промісів.
+* */
+
+//Тут я скористався допомогою chatgpt правда трохи модифікував йього
+
+async function concurrentPromises(promises, maxConcurrent) {
+    const results = new Array(promises.length);
+    let activePromises = 0;
+    let currentIndex = 0;
+
+    const executeNext = async () => {
+        while (currentIndex < promises.length && activePromises < maxConcurrent) {
+            const index = currentIndex;
+            const promise = promises[currentIndex];
+            activePromises++;
+            currentIndex++;
+
+            try {
+                const result = await promise;
+                results[index] = result;
+                console.log(`Promise ${index + 1} completed with result: ${result}`);
+            } catch (error) {
+                results[index] = null;
+                console.error(`Promise ${index + 1} failed:`, error);
+            } finally {
+                activePromises--;
+                executeNext();
+            }
+        }
+        if (currentIndex === promises.length && activePromises === 0) {
+            return results;
+        }
+    };
+
+    await executeNext();
+    return results;
+}
+
+concurrentPromises([
+    new Promise(resolve => setTimeout(() => resolve(1 + 2), 1000)),
+    new Promise(resolve => setTimeout(() => resolve(3 + 4), 500)),
+    new Promise(resolve => setTimeout(() => resolve(5 + 6), 800))
+], 2).then(results => {
+    console.log("Всі результати:", results);
+});
+
+
+
+
+
+
+
