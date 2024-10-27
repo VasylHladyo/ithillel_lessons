@@ -29,7 +29,7 @@ validate
 перевірку, то декоратор має викидати виняток.
  */
 const arr = [1, 2, 3, 4, 5, 6];
-const multiplier = '5';
+const multiplier = 'к';
 
 function multiplyArray(inputArray, multiplier) {
     return inputArray.map((item) => item * multiplier);
@@ -37,25 +37,36 @@ function multiplyArray(inputArray, multiplier) {
 
 function validateDecorator(fn, validator) {
     return function (inputArray, multiplier) {
-        validator(inputArray, multiplier);
+        if (!validator(inputArray, multiplier)) {
+            throw new Error('Некоректні вхідні дані');
+        }
         return fn(inputArray, multiplier);
     };
 }
+
 function validator(inputArray, multiplier) {
-    multiplier = multiplier *1;
+    multiplier = multiplier * 1;
     if (typeof multiplier !== 'number' || isNaN(multiplier)) {
         console.log('Множник не є числом');
+        return false;
     }
 
-    inputArray.forEach((item) => {
+    for (const item of inputArray) {
         if (typeof item !== 'number' || isNaN(item)) {
             console.log(`Елемент масиву ${item} не є числом`);
+            return false;
         }
-    });
+    }
+    return true;
 }
 
 const newFunc = validateDecorator(multiplyArray, validator);
-console.log(newFunc(arr, multiplier));
+
+try {
+    console.log(newFunc(arr, multiplier));
+} catch (error) {
+    console.error(error.message);
+}
 
 console.log('===================');
 
@@ -73,17 +84,19 @@ function countFunction(attempt) {
 }
 
 function retry(fn, maxAttempts) {
-    let lastResult;
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        const result = fn(attempt);
-        if (result === true) {
-            lastResult = `Результат спроби ${attempt}`;
-        } else if (attempt === maxAttempts) {
-            console.log("Викликати функцію не вдалося");
-            return lastResult;
-        }
+    const attempt = 4;
+    const result = fn(attempt);
+
+    if (result === true) {
+        return `Результат спроби ${attempt}`;
+    } else if (attempt > maxAttempts) {
+        return lastResult;
     }
+
+    lastResult = `Результат спроби ${attempt}`;
+    return lastResult;
 }
-console.log(retry(countFunction, 3));
+
+console.log(retry(countFunction, 4));
 
 
